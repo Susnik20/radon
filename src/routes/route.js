@@ -1,73 +1,99 @@
 const express = require('express');
+const underscore = require('underscore')
+
 const router = express.Router();
 
-router.get('/students/:name', function(req, res) {
-    let studentName = req.params.name
-    console.log(studentName)
-    res.send(studentName)
+router.get('/test-me', function (req, res) {
+    myHelper.printDate()
+    myHelper.getCurrentMonth()
+    myHelper.getCohortData()
+    let firstElement = underscore.first(['Sabiha','Akash','Pritesh'])
+    console.log('The first element received from underscope function is '+firstElement)
+    res.send('My first ever api!')
+});
+
+router.get('/hello', function (req, res) {
+    let movies = ['race','don','DDLG']
+    console.log(movies)
+   
+    res.send('Hello there!')
+});
+
+router.get('/films', function(req, res){
+    const films =  [ {
+        "id": 1,
+        "name": "The Shining"
+       }, {
+        "id": 2,
+        "name": "Incendies"
+       }, {
+        "id": 3,
+        "name": "Rang de Basanti"
+       }, { 
+        "id": 4,
+        "name": "Finding Nemo"
+       }]
+    res.send(films)
 })
 
-router.get("/random" , function(req, res) {
-    res.send("hi there")
+router.get('/movies/:indexNumber', function(req, res){
+    let movies = ['Rang de basanti', 'The shining' , 'Lord of the rings',  'Batman begins']
+    let displayMoive
+    if(req.params.indexNumber < movies.length){
+        displayMoive = movies[req.params.indexNumber]
+    }else{
+        displayMoive = "use a valid index number"
+    }
+    
+    res.send({data:displayMoive})
 })
+router.get('/films', function(req,res){
+    const films =  [ {
+          "id": 1,
+          "name": "The Shining"
+         }, {
+          "id": 2,
+          "name": "Incendies"
+         }, {
+          "id": 3,
+          "name": "Rang de Basanti"
+         }, {
+          "id": 4,
+          "name": "Finding Nemo"
+         }]
+      res.send(films)      
+  })
+  
+  router.get('/films/:filmId', function(req,res){
+      const films =  [ {
+          "id": 1,
+          "name": "The Shining"
+         }, {
+          "id": 2,
+          "name": "Incendies"
+         }, {
+          "id": 3,
+          "name": "Rang de Basanti"
+         }, {
+          "id": 4,
+          "name": "Finding Nemo"
+         }]
+      let displayingFilm
+      if(req.params.filmId <= films.length && req.params.filmId != 0){
+          for(index = 0; index< films.length; index++){
+              if(req.params.filmId == films[index].id){
+                  displayingFilm = films[index]
+        
+              }
+          }
+      }else{
+          displayingFilm = "no film at this index"
+      }
+      
+  
+      res.send(displayingFilm)
+  })
 
-
-router.get("/test-api" , function(req, res) {
-    res.send("hi FunctionUp")
-})
-
-
-router.get("/test-api-2" , function(req, res) {
-    res.send("hi FunctionUp. This is another cool API")
-})
-
-
-router.get("/test-api-3" , function(req, res) {
-    res.send("hi FunctionUp. This is another cool API. And NOw i am bored of creating API's ")
-})
-
-
-router.get("/test-api-4" , function(req, res) {
-    res.send("hi FunctionUp. This is another cool API. And NOw i am bored of creating API's. PLZ STOP CREATING MORE API;s ")
-})
-
-
-
-router.get("/test-api-5" , function(req, res) {
-    res.send("hi FunctionUp5. This is another cool API. And NOw i am bored of creating API's. PLZ STOP CREATING MORE API;s ")
-})
-
-router.get("/test-api-6" , function(req, res) {
-    res.send({a:56, b: 45})
-})
-
-router.post("/test-post", function(req, res) {
-    res.send([ 23, 45 , 6])
-})
-
-
-router.post("/test-post-2", function(req, res) {
-    res.send(  { msg: "hi" , status: true }  )
-})
-
-router.post("/test-post-3", function(req, res) {
-    // let id = req.body.user
-    // let pwd= req.body.password
-
-    // console.log( id , pwd)
-
-    console.log( req.body )
-
-    res.send(  { msg: "hi" , status: true }  )
-})
-
-
-
-router.post("/test-post-4", function(req, res) {
-    let arr= [ 12, "functionup"]
-    let ele= req.body.element
-    arr.push(ele)
-    res.send(  { msg: arr , status: true }  )
-})
 
 module.exports = router;
+// adding this comment for no reason
