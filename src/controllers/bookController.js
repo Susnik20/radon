@@ -1,5 +1,6 @@
 const { count } = require("console")
-const BookModel= require("../models/bookModel")
+ const BookModel= require("../models/bookModel1")
+ const AuthorModel = require('../models/authorModel')
 
 const createBook= async function (req, res) {
     let data= req.body
@@ -7,14 +8,41 @@ const createBook= async function (req, res) {
     let savedData= await BookModel.create(data)
     res.send({msg: savedData})
 }
+const authorBook= async function (req, res) {
+    let data= req.body
 
-const getBooksData= async function (req, res) {
+    let savedData= await AuthorModel.create(data)
+    res.send({msg: savedData})
+}
+const getCBBooks= async function(req,res){
+    let id = await AuthorModel.find({author_name : "Chetan Bhagat"}).select({author_id : 1})
+    let book = await BookModel.find({author_id : id[0].author_id})
+    res.send({msg:book})
+}
+const updateBook= async function(req,res){
+    let data = await BookModel.findOneAndUpdate({name : "Two states"}, {$set:{price:100}}, {new: true,upsert:true})
+    let newdata = await AuthorModel.find({author_id : data.author_id}).select("author_name")
+    let price = data.price
+    res.send({author_name: newdata, price :price})
+    
+}
+const bookNew = async function(req, res){
+    let bookRange = await BookModel.find({price:{$lte:50, $gte:100}}).select({ author_id :1})
+    let arr = []
+    for (let i=0; i<bookRange.length ; i++){
+        let authorName = await AuthorModel.findOne({author_id: bookRange[i].author_id}).select({author_name:1, author_id:1, _id:0})
+        arr.push(authorName)
+    }
+    res.send({msg:arr})
+    
+}
+// const getBooksData= async function (req, res) {
 
     // let allBooks= await BookModel.find( ).count() // COUNT
 
     // let allBooks= await BookModel.find( { authorName : "Chetan Bhagat" , isPublished: true  } ) // AND
     
-    let bookList= await BookModel.find().select({ bookName: 1, authorName: 1})
+    // let bookList= await BookModel.find().select({ bookName: 1, authorName: 1})
     //     $or: [ {authorName : "Chetan Bhagat" } , { isPublished: true } , {  "year": 1991 }]
     // } ).select( { bookName: 1, authorName: 1, _id: 0})n // SELECT keys that we want
 
@@ -77,31 +105,35 @@ const getBooksData= async function (req, res) {
     // let b = 14
     // b= b+ 10
     // console.log(b)
-    res.send({msg: bookList})
+//     res.send({msg: bookList})
 
-}
-const getbookyr = async function(req,res) {
-    let publishyr = req.body.year
-    let bookyr = await BookModel.find({year : publishyr})
-    res.send({msg : bookyr})
-}
-const getXINRBooks = async function(req,res) {
-    let price = await BookModel.find({ "prices.indianPrice":{$in:["INR100","INR200","INR500"]} })
-    res.send({msg : price})
-}
-const getRandomBooks= async function(req,res) {
-    let getRandomBooks = await BookModel.find({$and : [{stockAvailable:true},{totalPages:500}]})
-    res.send({msg : getRandomBooks})
-}
-const getParticularBooks= async function(req,res) {
-    let condition = req.body
-    let getParticularBooks = await BookModel.find(condition)
-    res.send({msg : getParticularBooks})
-}
+// }
+// const getbookyr = async function(req,res) {
+//     let publishyr = req.body.year
+//     let bookyr = await BookModel.find({year : publishyr})
+//     res.send({msg : bookyr})
+// }
+// const getXINRBooks = async function(req,res) {
+//     let price = await BookModel.find({ "prices.indianPrice":{$in:["INR100","INR200","INR500"]} })
+//     res.send({msg : price})
+// }
+// const getRandomBooks= async function(req,res) {
+//     let getRandomBooks = await BookModel.find({$or : [{stockAvailable:true},{totalPages:500}]})
+//     res.send({msg : getRandomBooks})
+// }
+// const getParticularBooks= async function(req,res) {
+//     let condition = req.body
+//     let getParticularBooks = await BookModel.find(condition)
+//     res.send({msg : getParticularBooks})
+// }const priceUpdate = async function(req, res){
+
 
 module.exports.createBook= createBook
-module.exports.getBooksData= getBooksData
-module.exports.getbookyr = getbookyr
-module.exports. getXINRBooks = getXINRBooks 
-module.exports.getRandomBooks =getRandomBooks
-module.exports.getParticularBooks = getParticularBooks
+module.exports.authorBook= authorBook
+module.exports.getCBBooks= getCBBooks
+module.exports.updateBook = updateBook
+module.exports.bookNew = bookNew
+// module.exports.getbookyr = getbookyr
+// module.exports. getXINRBooks = getXINRBooks 
+// module.exports.getRandomBooks =getRandomBooks
+// module.exports.getParticularBooks = getParticularBooks
