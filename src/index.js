@@ -8,7 +8,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+<<<<<<< Updated upstream
 mongoose.connect("mongodb+srv://anik2310:anik123@cluster0.tby9aun.mongodb.net/anik2310?retryWrites=true&w=majority", {
+=======
+mongoose.connect("mongodb+srv://anik2310:anik123@cluster0.tby9aun.mongodb.net/anikhalder?retryWrites=true&w=majority", {
+>>>>>>> Stashed changes
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))

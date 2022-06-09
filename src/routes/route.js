@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 // const UserModel= require("../models/userModel.js")
-const UserController= require("../controllers/userController")
 const BookController= require("../controllers/bookController")
 
 
@@ -28,6 +27,11 @@ router.post("/updateBook",             BookController.updateBook    )
 
 router.get("/bookNew",                BookController.bookNew        )
 
+<<<<<<< Updated upstream
 router.get("/getRandomBooks",                      )
+=======
+router.get("/book",    BookController.getNameAge         )
+router.get("/book_By_Id/:id", BookController.bookById)
+>>>>>>> Stashed changes
 
 module.exports = router;

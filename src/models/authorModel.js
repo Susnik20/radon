@@ -6,4 +6,8 @@ const authorSchema = new mongoose.Schema({
     age : Number,
     address : String
 }, { timestamps: true });
+<<<<<<< Updated upstream
 module.exports = mongoose.model('author',authorSchema)
+=======
+module.exports = mongoose.model('author1',authorSchema)
+>>>>>>> Stashed changes
